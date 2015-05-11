@@ -19,3 +19,5 @@ This project is hosted on https://softwarefactory-project.io and contributions
 undergo a reviewing process. To contribute, please clone the repository at
 https://softwarefactory-project.io and setup a gerrit review account (see
 Software Factory's documentation for more information).
+
+*DO NOT MERGE*
