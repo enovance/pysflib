@@ -26,24 +26,35 @@ try:
 except:
     pass
 
-from pip.req import parse_requirements
-from pip.download import PipSession
 
-# parse_requirements() returns generator of pip.req.InstallRequirement objects
-install_reqs = parse_requirements('requirements.txt', session=PipSession())
+INSTALL_REQUIRES = ['nose',
+                    'mock',
+                    'requests>=2.4.1',
+                    'python-redmine',
+                    'pyyaml',
+                    'six',
+                    'pygerrit>=0.2.9']
 
-# reqs is a list of requirement
-reqs = [str(ir.req) for ir in install_reqs]
+
+DEP_LINKS = [('git+https://github.com/sonyxperiadev/'
+              'pygerrit.git#egg=pygerrit-0.2.9'), ]
+
+VERSION = '0.1.1'
 
 setup(
     name='pysflib',
-    version='0.1',
-    description='',
-    author='',
-    author_email='',
-    install_requires=reqs,
+    version=VERSION,
+    description=('a python library to interact with '
+                 'a software factory instance'),
+    author='Software Factory',
+    author_email='softwarefactory@enovance.com',
+    install_requires=INSTALL_REQUIRES,
+    dependency_links=DEP_LINKS,
     test_suite='nose.collector',
     zip_safe=False,
     include_package_data=True,
-    packages=find_packages(exclude=['ez_setup'])
+    packages=find_packages(exclude=['ez_setup']),
+    url='http://softwarefactory.enovance.com/r/gitweb?p=pysflib.git;a=summary',
+    download_url='https://github.com/enovance/pysflib/tarball/%s' % VERSION,
+    keywords=['software factory', 'CI', 'continuous integration'],
 )
