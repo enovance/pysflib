@@ -53,6 +53,7 @@ class SFGerritRestAPI(GerritRestAPI):
         self.debug("Send HTTP GET request %s with kwargs %s" %
                    (url, str(kwargs)))
         response = self.session.get(url, **kwargs)
+        self.debug("-> %d" % response.status_code)
         return _decode_response(response)
 
     def put(self, endpoint, **kwargs):
@@ -63,6 +64,7 @@ class SFGerritRestAPI(GerritRestAPI):
         self.debug("Send HTTP PUT request %s with kwargs %s" %
                    (url, str(kwargs)))
         response = self.session.put(url, **kwargs)
+        self.debug("-> %d" % response.status_code)
         return _decode_response(response)
 
     def post(self, endpoint, **kwargs):
@@ -79,6 +81,7 @@ class SFGerritRestAPI(GerritRestAPI):
         self.debug("Send HTTP POST request %s with kwargs %s" %
                    (url, str(kwargs)))
         response = self.session.post(url, **kwargs)
+        self.debug("-> %d" % response.status_code)
         return _decode_response(response)
 
     def delete(self, endpoint, **kwargs):
@@ -93,6 +96,7 @@ class SFGerritRestAPI(GerritRestAPI):
         self.debug("Send HTTP DELETE request %s with kwargs %s" %
                    (url, str(kwargs)))
         response = self.session.delete(url, **kwargs)
+        self.debug("-> %d" % response.status_code)
         return _decode_response(response)
 
 
