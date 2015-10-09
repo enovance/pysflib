@@ -15,20 +15,19 @@
 # We rely on https://github.com/maxtepkeev/python-redmine
 
 import json
+import re
 import requests
 
 from redmine import Redmine
 from redmine.utilities import to_string, json_response
-from redmine.exceptions import (
-    AuthError,
-    ConflictError,
-    ImpersonateError,
-    ServerError,
-    ValidationError,
-    ResourceNotFoundError,
-    RequestEntityTooLargeError,
-    UnknownError
-)
+from redmine.exceptions import (AuthError,
+                                ConflictError,
+                                ImpersonateError,
+                                ServerError,
+                                ValidationError,
+                                ResourceNotFoundError,
+                                RequestEntityTooLargeError,
+                                UnknownError)
 
 
 class SFRedmine(Redmine):
@@ -161,6 +160,12 @@ class RedmineUtils:
         return False
 
     def create_project(self, name, description, private):
+        name_re = re.compile('^[a-z][a-z0-9-_]{0,99}$')
+        if not name_re.match(name):
+            raise ValueError('The name should have a length between 1 and '
+                             '100 characters. Only lower case letters '
+                             '(a-z), numbers, dashes and underscores are '
+                             'allowed, must start with a letter')
         self.r.project.create(name=name,
                               identifier=name,
                               description=description,
