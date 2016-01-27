@@ -41,22 +41,22 @@ class TestSFGerritRestAPI(TestCase):
         self.assertDictEqual(ge.kwargs, expected)
 
     def test_verbs_calls(self):
-        with patch('pygerrit.rest.requests.session'):
+        with patch('pygerrit.rest.requests'):
             with patch('pysflib.sfgerrit._decode_response'):
                 ge = sfgerrit.SFGerritRestAPI('http://gerrit.tests.dom',
                                               auth_cookie='1234')
-                ge.session.get = Mock()
-                ge.session.put = Mock()
-                ge.session.post = Mock()
-                ge.session.delete = Mock()
+                ge.get = Mock()
+                ge.put = Mock()
+                ge.post = Mock()
+                ge.delete = Mock()
                 ge.get('projects/?')
-                self.assertEqual(ge.session.get.call_count, 1)
+                self.assertEqual(ge.get.call_count, 1)
                 ge.put('projects/p1')
-                self.assertEqual(ge.session.put.call_count, 1)
+                self.assertEqual(ge.put.call_count, 1)
                 ge.post('projects/p1')
-                self.assertEqual(ge.session.post.call_count, 1)
+                self.assertEqual(ge.post.call_count, 1)
                 ge.delete('projects/p1')
-                self.assertEqual(ge.session.delete.call_count, 1)
+                self.assertEqual(ge.delete.call_count, 1)
 
 
 class TestGerritUtils(TestCase):

@@ -16,6 +16,7 @@
 
 import json
 import logging
+import requests
 from requests.exceptions import HTTPError
 from pygerrit.rest import GerritRestAPI
 from pygerrit.rest import _decode_response
@@ -52,7 +53,7 @@ class SFGerritRestAPI(GerritRestAPI):
         url = self.make_url(endpoint)
         self.debug("Send HTTP GET request %s with kwargs %s" %
                    (url, str(kwargs)))
-        response = self.session.get(url, **kwargs)
+        response = requests.get(url, **kwargs)
         return _decode_response(response)
 
     def put(self, endpoint, **kwargs):
@@ -62,7 +63,7 @@ class SFGerritRestAPI(GerritRestAPI):
             {"Content-Type": "application/json;charset=UTF-8"})
         self.debug("Send HTTP PUT request %s with kwargs %s" %
                    (url, str(kwargs)))
-        response = self.session.put(url, **kwargs)
+        response = requests.put(url, **kwargs)
         return _decode_response(response)
 
     def post(self, endpoint, **kwargs):
@@ -78,7 +79,7 @@ class SFGerritRestAPI(GerritRestAPI):
         url = self.make_url(endpoint)
         self.debug("Send HTTP POST request %s with kwargs %s" %
                    (url, str(kwargs)))
-        response = self.session.post(url, **kwargs)
+        response = requests.post(url, **kwargs)
         return _decode_response(response)
 
     def delete(self, endpoint, **kwargs):
@@ -92,7 +93,7 @@ class SFGerritRestAPI(GerritRestAPI):
         url = self.make_url(endpoint)
         self.debug("Send HTTP DELETE request %s with kwargs %s" %
                    (url, str(kwargs)))
-        response = self.session.delete(url, **kwargs)
+        response = requests.delete(url, **kwargs)
         return _decode_response(response)
 
 
