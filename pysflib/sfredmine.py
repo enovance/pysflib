@@ -101,7 +101,7 @@ class RedmineUtils:
         self.r = SFRedmine(*args, **kwargs)
 
     def _slugify(self, name):
-        return name.strip().replace(' ', '-').lower()
+        return name.strip().replace(' ', '-').replace('/', '_').lower()
 
     def project_exists(self, name):
         try:
