@@ -132,6 +132,15 @@ class TestGerritUtils(TestCase):
                                      {'permissions': {'owner': None}}}}}
             self.assertEqual(self.ge.get_project_owner('p1'), None)
 
+    def test_get_project_groups_id(self):
+        r1 = json.load(open('test_data/gerrit_access.json'))
+        with patch('pysflib.sfgerrit.SFGerritRestAPI.get',
+                   side_effect=[r1]):
+            groups = self.ge.get_project_groups_id(['project1'])
+            self.assertIn('project1', groups)
+            self.assertIn('53a4f647a89ea57992571187d8025f830625192a', groups['project1']['others'])
+            self.assertIn('owners', groups['project1'].keys())
+
     def test_get_project_groups(self):
         r1 = json.load(open('test_data/gerrit_access.json'))
         r2 = 'p1-dev'
