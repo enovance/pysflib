@@ -284,7 +284,8 @@ class GerritUtils:
             try:
                 url = 'accounts/%s/emails/%s' % (id or username,
                                                  kwargs['email'])
-                self.g.put(url)
+                self.g.put(url,
+                           data=json.dumps({'email': kwargs['email']}))
             except HTTPError as e:
                 return self._manage_errors(e)
         if not ('full_name' in kwargs.keys() or 'email' in kwargs.keys()):
