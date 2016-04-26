@@ -30,6 +30,8 @@ from redmine.exceptions import (AuthError,
                                 RequestEntityTooLargeError,
                                 UnknownError)
 
+from pysflib.interfaces.issuetracker import IssueTrackerUtils
+
 logger = logging.getLogger(__name__)
 
 
@@ -104,7 +106,7 @@ class SFRedmine(Redmine):
         raise UnknownError(response.status_code)
 
 
-class RedmineUtils:
+class RedmineUtils(IssueTrackerUtils):
     """ Utility class that eases calls on the Redmine API
     for software-factory. Provide the args you used to pass
     to python-redmine.Redmine and add auth_cookie to authenticate
