@@ -90,7 +90,9 @@ class TestGerritUtils(TestCase):
                                                     'desc',
                                                     'ns1/pj2-ptl'),
                              None)
-            g.assert_called_with('projects/ns1%2Fpj2', data=data)
+            args, kwargs = g.call_args
+            self.assertEqual(args[0], 'projects/ns1%2Fpj2')
+            self.assertDictEqual(kwargs.get('data'), data)
 
         with patch('pysflib.sfgerrit.SFGerritRestAPI.put',
                    side_effect=raise_fake_exc):
@@ -291,7 +293,9 @@ class TestGerritUtils(TestCase):
                            "name": "p1-ptl"})
         with patch('pysflib.sfgerrit.SFGerritRestAPI.put') as g:
             self.assertEqual(self.ge.create_group('p1-ptl', 'desc'), None)
-            g.assert_called_with('groups/p1-ptl', data=data)
+            args, kwargs = g.call_args
+            self.assertEqual(args[0], 'groups/p1-ptl')
+            self.assertDictEqual(kwargs.get('data'), data)
 
         data = json.dumps({"visible_to_all": True,
                            "description": "desc",
@@ -299,7 +303,9 @@ class TestGerritUtils(TestCase):
         with patch('pysflib.sfgerrit.SFGerritRestAPI.put') as g:
             self.assertEqual(self.ge.create_group('ns1\\prj1-dev', 'desc'),
                              None)
-            g.assert_called_with('groups/ns1%5Cprj1-dev', data=data)
+            args, kwargs = g.call_args
+            self.assertEqual(args[0], 'groups/ns1%5Cprj1-dev')
+            self.assertDictEqual(kwargs.get('data'), data)
 
         with patch('pysflib.sfgerrit.SFGerritRestAPI.put',
                    side_effect=raise_fake_exc):
