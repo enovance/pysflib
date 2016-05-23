@@ -40,23 +40,22 @@ class TestSFGerritRestAPI(TestCase):
                                 'Accept': 'application/json'}}
         self.assertDictEqual(ge.kwargs, expected)
 
-    def test_verbs_calls(self):
-        with patch('pygerrit.rest.requests.session'):
-            with patch('pysflib.sfgerrit._decode_response'):
-                ge = sfgerrit.SFGerritRestAPI('http://gerrit.tests.dom',
-                                              auth_cookie='1234')
-                ge.session.get = Mock()
-                ge.session.put = Mock()
-                ge.session.post = Mock()
-                ge.session.delete = Mock()
-                ge.get('projects/?')
-                self.assertEqual(ge.session.get.call_count, 1)
-                ge.put('projects/p1')
-                self.assertEqual(ge.session.put.call_count, 1)
-                ge.post('projects/p1')
-                self.assertEqual(ge.session.post.call_count, 1)
-                ge.delete('projects/p1')
-                self.assertEqual(ge.session.delete.call_count, 1)
+    @patch('requests.delete')
+    @patch('requests.post')
+    @patch('requests.put')
+    @patch('requests.get')
+    def test_verbs_calls(self, mock_get, mock_put, mock_post, mock_delete):
+        with patch('pysflib.sfgerrit._decode_response'):
+            ge = sfgerrit.SFGerritRestAPI('http://gerrit.tests.dom',
+                                          auth_cookie='1234')
+            ge.get('projects/?')
+            self.assertEqual(mock_get.call_count, 1)
+            ge.put('projects/p1')
+            self.assertEqual(mock_put.call_count, 1)
+            ge.post('projects/p1')
+            self.assertEqual(mock_post.call_count, 1)
+            ge.delete('projects/p1')
+            self.assertEqual(mock_delete.call_count, 1)
 
 
 class TestGerritUtils(TestCase):
