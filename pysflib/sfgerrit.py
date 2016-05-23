@@ -17,6 +17,7 @@
 import json
 import logging
 import urllib
+import requests
 from requests.exceptions import HTTPError
 from pygerrit.rest import GerritRestAPI
 from pygerrit.rest import _decode_response
@@ -40,6 +41,7 @@ class SFGerritRestAPI(GerritRestAPI):
         else:
             super(SFGerritRestAPI, self).__init__(*args, **kwargs)
         self.debug_logs = set()
+        self.session = requests.session()
 
     def debug(self, msg):
         if msg in self.debug_logs:
