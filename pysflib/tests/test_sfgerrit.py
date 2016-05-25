@@ -81,16 +81,19 @@ class TestGerritUtils(TestCase):
             self.assertFalse(self.ge.project_exists('p1'))
 
     def test_create_project(self):
-        data = json.dumps({"description": "desc",
-                           "create_empty_commit": True,
-                           "name": "ns1/pj2",
-                           "owners": "ns1/pj2-ptl"})
+        data = {"description": "desc",
+                "create_empty_commit": True,
+                "name": "ns1/pj2",
+                "owners": "ns1/pj2-ptl"}
         with patch('pysflib.sfgerrit.SFGerritRestAPI.put') as g:
             self.assertEqual(self.ge.create_project('ns1/pj2',
                                                     'desc',
                                                     'ns1/pj2-ptl'),
                              None)
-            g.assert_called_with('projects/ns1%2Fpj2', data=data)
+            path = g.call_args[0][0]
+            rdata = json.loads(g.call_args[1]['data'])
+            self.assertEqual(path, 'projects/ns1%2Fpj2')
+            self.assertDictEqual(rdata, data)
 
         with patch('pysflib.sfgerrit.SFGerritRestAPI.put',
                    side_effect=raise_fake_exc):
