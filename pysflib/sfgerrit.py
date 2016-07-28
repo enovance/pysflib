@@ -381,6 +381,7 @@ class GerritUtils:
             name = urllib.quote_plus(name)
             self.g.put('groups/%s' % name,
                        data=data)
+            return True
         except HTTPError as e:
             return self._manage_errors(e)
 
