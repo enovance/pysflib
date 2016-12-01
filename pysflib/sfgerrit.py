@@ -592,6 +592,37 @@ class GerritUtils:
         except HTTPError as e:
             return self._manage_errors(e)
 
+    def get_vote(self, change_number, label, username="jenkins"):
+        try:
+            info = self.g.get("changes/%d/detail" % change_number)
+        except HTTPError as e:
+            msg = "Couldn't get change %d detail (%s)" % (change_number, e)
+            logger.error(msg)
+            return None
+        for vote in info["labels"][label].get("all", []):
+            if vote.get("username") == username:
+                return vote.get("value")
+
+    def wait_for_verify(self, change_number, timeout=60):
+        for retry in xrange(timeout):
+            vote = self.get_vote(change_number, "Verified", "jenkins")
+            if vote is not None:
+                return vote
+        msg = "Jenkins didn't vote on %d" % change_number
+        logger.error(msg)
+        raise RuntimeError(msg)
+
+    def get_change_number(self, commit_sha):
+        try:
+            changes = self.g.get("changes/?q=commit:%s" % commit_sha)
+        except HTTPError as e:
+            msg = "Couldn't get changes for commit %s (%s)" % (commit_sha, e)
+            logger.error(msg)
+            raise RuntimeError(msg)
+        if len(changes) != 1:
+            logger.warning("Multiple change match commit %s" % commit_sha)
+        return changes[0]['_number']
+
 
 # Examples
 if __name__ == "__main__":
